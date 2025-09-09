@@ -1,0 +1,4 @@
+PyQt6==6.9.1
+black==25.1.0
+ruff==0.12.12
+pyinstaller==6.15.0
