@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Hospital da Crianças - Dashboard</title>
+	<link rel="icon" href="{{ url_for('static', filename='images/fevicon.png') }}" type="image/png" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+	<style>
+		/* Inline minimal styles to make the template self-contained */
+		body { margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial, 'Noto Sans', 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif; }
+		.sidebar-modern { width: 280px; background: #0a2540; color: #fff; position: fixed; top: 0; left: 0; bottom: 0; overflow: auto; }
+		.main-content { margin-left: 280px; padding: 16px; }
+		.dashboard-card { background: #fff; border-radius: 10px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+		.section-title { font-size: 1.1rem; font-weight: 600; margin: 0 0 12px; display: flex; align-items: center; gap: 8px; }
+		.table { width: 100%; border-collapse: collapse; }
+		.table th, .table td { border-bottom: 1px solid #eee; padding: 10px; text-align: left; }
+		.status-badge { padding: 4px 10px; border-radius: 999px; background: rgba(76,175,80,.15); color: #4caf50; font-size: .75rem; font-weight: 600; }
+		.welcome { background: linear-gradient(135deg, #0a2540, #1e4e7e); color: #fff; border-radius: 10px; padding: 20px; margin-bottom: 16px; }
+	</style>
+</head>
+<body>
+	<nav class="sidebar-modern" id="sidebar">
+		<div style="padding: 16px; font-weight: 700;">Hospital da Criança</div>
+	</nav>
+	<div class="main-content" id="mainContent">
+		<div class="welcome">
+			<div style="font-size: 1.5rem; font-weight: 700;">Bem-vindo, {{ username }}!</div>
+			<div>Dashboard do Sistema de Gestão - {{ data_atual }}</div>
+		</div>
+		<div class="dashboard-card">
+			<h5 class="section-title"><i class="fa fa-clock"></i> Últimos Registros</h5>
+			<table class="table">
+				<thead><tr><th>Funcionário</th><th>Matrícula</th><th>Horário</th><th>Status</th></tr></thead>
+				<tbody>
+					{% for ponto in ultimos_pontos %}
+					<tr>
+						<td>{{ ponto.nome }}</td>
+						<td>{{ ponto.matricula }}</td>
+						<td>{{ ponto.data_hora.strftime('%H:%M') }}</td>
+						<td><span class="status-badge">Registrado</span></td>
+					</tr>
+					{% else %}
+					<tr><td colspan="4" style="text-align:center; color:#777;">Nenhum registro encontrado</td></tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<script>
+		// Minimal JS to avoid missing CDN/local assets
+	</script>
+</body>
+</html>
+

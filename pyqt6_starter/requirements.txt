@@ -1,4 +1,6 @@
 PyQt6==6.9.1
+PyQt6-WebEngine==6.9.0
+Flask==3.1.2
 black==25.1.0
 ruff==0.12.12
 pyinstaller==6.15.0

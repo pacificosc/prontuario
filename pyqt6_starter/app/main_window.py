@@ -1,20 +1,18 @@
 from __future__ import annotations
 
-from PyQt6.QtCore import QSize, pyqtSlot
+from PyQt6.QtCore import QSize, pyqtSlot, QUrl
 from PyQt6.QtGui import QAction
 from PyQt6.QtWidgets import (
-	QLabel,
 	QMainWindow,
-	QPushButton,
 	QStatusBar,
 	QToolBar,
-	QVBoxLayout,
 	QWidget,
 )
+from PyQt6.QtWebEngineWidgets import QWebEngineView
 
 
 class MainWindow(QMainWindow):
-	"""Main application window with a simple label and button."""
+	"""Main window that hosts a QWebEngineView pointing to the local Flask app."""
 
 	def __init__(self) -> None:
 		super().__init__()
@@ -22,20 +20,23 @@ class MainWindow(QMainWindow):
 		self.resize(800, 500)
 
 		central_widget = QWidget(self)
-		layout = QVBoxLayout(central_widget)
-
-		self.message_label = QLabel("Hello, PyQt6!", parent=central_widget)
-		self.primary_button = QPushButton("Click me", parent=central_widget)
-		self.primary_button.clicked.connect(self.on_primary_button_clicked)
-
-		layout.addWidget(self.message_label)
-		layout.addWidget(self.primary_button)
-		self.setCentralWidget(central_widget)
+		self.web_view = QWebEngineView(central_widget)
+		self.setCentralWidget(self.web_view)
 
 		# Toolbar
 		toolbar = QToolBar("Main Toolbar", self)
 		toolbar.setIconSize(QSize(16, 16))
 		self.addToolBar(toolbar)
+
+		action_reload = QAction("Reload", self)
+		action_reload.setStatusTip("Reload page")
+		action_reload.triggered.connect(self.on_reload)
+		toolbar.addAction(action_reload)
+
+		action_home = QAction("Home", self)
+		action_home.setStatusTip("Go to dashboard")
+		action_home.triggered.connect(self.on_home)
+		toolbar.addAction(action_home)
 
 		action_quit = QAction("Quit", self)
 		action_quit.setStatusTip("Exit application")
@@ -47,7 +48,14 @@ class MainWindow(QMainWindow):
 		self.setStatusBar(status_bar)
 		status_bar.showMessage("Ready")
 
+	def load_url(self, url: str) -> None:
+		self.web_view.setUrl(QUrl(url))
+
 	@pyqtSlot()
-	def on_primary_button_clicked(self) -> None:
-		self.message_label.setText("Clicked!")
+	def on_reload(self) -> None:
+		self.web_view.reload()
+
+	@pyqtSlot()
+	def on_home(self) -> None:
+		self.load_url("http://127.0.0.1:5000/")
 
